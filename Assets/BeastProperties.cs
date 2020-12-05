@@ -4,67 +4,19 @@ using UnityEngine;
 
 public class BeastProperties : MonoBehaviour
 {
-    public GameObject killText;
-    public GameObject lootText;
-    public GameObject prText;
-    GameObject player;
-    public Inventory inventory;
-
-
     public List<string> Loot;
-    public bool isDead = false;
-    public bool isLooted = false;
-    float DespawnTimer = 5;
-    bool doOnce = false;
-
-    float amountOfLoot;
-    public float avaliableLoot;
-    bool PaidRespects = false;
+    [HideInInspector] public bool isDead = false;
+    [HideInInspector] public bool isLooted;
+    [HideInInspector] public float amountOfLoot;
+    [HideInInspector] public float avaliableLoot;
 
     string item;
+    bool doOnce = false;
+    float DespawnTimer = 5;
 
-    private void Awake() {
-        killText = GameObject.Find("Kill");
-        lootText = GameObject.Find("Loot");
-        prText = GameObject.Find("PayRespects");
-        player = GameObject.Find("Player");
-        inventory = GameObject.Find("Player").GetComponent<Inventory>();
-    }
     private void Update() {
-        Kill();
         DeathAnimation();
     }
-    void Kill() {
-
-        if (inventory.Distance() <= 5 && !isDead) {
-            killText.SetActive(true);
-
-            if (Input.GetKeyDown(KeyCode.Alpha1)) {
-                isDead = true;
-                AmountOfLoot();
-                avaliableLoot = amountOfLoot;
-                if (avaliableLoot == 0f) {
-                    isLooted = true;
-                } else {
-                    FindLoot();
-                    isLooted = false;
-                }
-            }
-        } else {
-            killText.SetActive(false);
-        }
-
-
-        if (!PaidRespects) {
-            prText.SetActive(true);
-        }
-        if (Input.GetKeyDown(KeyCode.F)) {
-            prText.SetActive(false);
-            PaidRespects = true;
-        }
-    }
-
-
 
     public float AmountOfLoot() {
         float randomNumber;
@@ -83,18 +35,15 @@ public class BeastProperties : MonoBehaviour
         if (randomNumber == 10) {
             amountOfLoot = 3f;
         }
-        Debug.Log(randomNumber);
         return amountOfLoot;
     }
     public List<string> FindLoot() {
         float randomNumber;
         float i = 0;
 
-
         while (i < avaliableLoot) {
             randomNumber = Random.Range(1, 10001);
             bool addItem = true;
-            Debug.Log(randomNumber);
 
 
             if (randomNumber >= 1 && randomNumber <= 500) {
@@ -144,7 +93,6 @@ public class BeastProperties : MonoBehaviour
         }
     }
     void Despawn() {
-
-        Destroy(gameObject);
+        gameObject.SetActive(false);
     }
 }
